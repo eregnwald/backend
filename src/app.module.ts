@@ -34,10 +34,10 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost', // если база у тебя на локальном компьютере
+      host: 'cifudupu.beget.app', // если база у тебя на локальном компьютере
       port: 5432,
-      username: 'postgres', // твой пользователь базы данных
-      password: 'admin', // твой пароль к базе
+      username: 'dbadmin', // твой пользователь базы данных
+      password: 'V7zhm%XkDQQM', // твой пароль к базе
       database: 'crm', // имя базы данных
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // в разработке true, в продакшене false

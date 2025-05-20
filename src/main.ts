@@ -7,7 +7,7 @@ async function bootstrap() {
 
   // Настройка CORS
   app.enableCors({
-    origin: 'http://localhost:3001', // разрешаем доступ только с фронтенда
+    origin: 'http://5.35.86.252:3001', // разрешаем доступ только с фронтенда
     credentials: true,
   });
 
