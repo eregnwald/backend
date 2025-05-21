@@ -35,6 +35,7 @@ const documents_module_1 = require("./documents/documents.module");
 const entity_tags_module_1 = require("./entity-tags/entity-tags.module");
 const tags_module_1 = require("./tags/tags.module");
 const auth_module_1 = require("./auth/auth.module");
+const config_2 = require("@nestjs/config");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -43,16 +44,20 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
             users_module_1.UsersModule,
-            typeorm_1.TypeOrmModule.forRoot({
-                type: 'postgres',
-                host: 'localhost',
-                port: 5432,
-                username: 'postgres',
-                password: 'admin',
-                database: 'crm',
-                entities: [__dirname + '/**/*.entity{.ts,.js}'],
-                synchronize: true,
-                autoLoadEntities: true,
+            typeorm_1.TypeOrmModule.forRootAsync({
+                useFactory: (configService) => ({
+                    type: 'postgres',
+                    host: configService.get('DB_HOST'),
+                    port: configService.get('DB_PORT', 5432),
+                    username: configService.get('DB_USERNAME'),
+                    password: configService.get('DB_PASSWORD'),
+                    database: configService.get('DB_NAME'),
+                    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+                    synchronize: configService.get('DB_SYNCHRONIZE', true),
+                    autoLoadEntities: true,
+                    logging: configService.get('DB_LOGGING', false),
+                }),
+                inject: [config_2.ConfigService],
             }),
             accounts_module_1.AccountsModule,
             contacts_module_1.ContactsModule,

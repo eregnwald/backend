@@ -14,7 +14,6 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
-    // ❗ Используем существующий метод findByEmail(), который загружает роли
     const user = await this.usersService.findByEmail(email);
 
     if (user && (await bcrypt.compare(password, user.password_hash))) {

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config'; // ✅ добавить
+import { ConfigModule } from '@nestjs/config'; 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountsModule } from './accounts/accounts.module';
-import { ContactsModule } from './contacts/contacts.module'; // Добавлено для корректности
+import { ContactsModule } from './contacts/contacts.module'; 
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { TasksModule } from './tasks/tasks.module';
 import { TaskPrioritiesModule } from './task-priorities/task-priorities.module';
@@ -26,22 +26,26 @@ import { DocumentsModule } from './documents/documents.module';
 import { EntityTagsModule } from './entity-tags/entity-tags.module';
 import { TagsModule } from './tags/tags.module';
 import { AuthModule } from './auth/auth.module';
-
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }), // ✅ добавить эту строчку
     UsersModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'cifudupu.beget.app', // если база у тебя на локальном компьютере
-      port: 5432,
-      username: 'dbadmin', // твой пользователь базы данных
-      password: 'V7zhm%XkDQQM', // твой пароль к базе
-      database: 'crm', // имя базы данных
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // в разработке true, в продакшене false
-      autoLoadEntities: true,
+   TypeOrmModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT', 5432),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: configService.get<boolean>('DB_SYNCHRONIZE', true),
+        autoLoadEntities: true,
+        logging: configService.get<boolean>('DB_LOGGING', false),
+      }),
+      inject: [ConfigService],
     }),
     AccountsModule,
     ContactsModule,
