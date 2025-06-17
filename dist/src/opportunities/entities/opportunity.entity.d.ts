@@ -1,0 +1,30 @@
+import { Account } from '../../accounts/entities/account.entity';
+import { Contact } from '../../contacts/entities/contact.entity';
+import { User } from '../../users/entities/user.entity';
+import { SalesFunnelStage } from 'src/salesfunnelstages/funnel-stage.entity';
+import { Task } from '../../tasks/entities/task.entity';
+export declare class Opportunity {
+    opportunity_id: number;
+    opportunity_name: string;
+    amount: number;
+    contact_id: number;
+    owner_id: number;
+    is_deleted: boolean;
+    close_date: Date | null;
+    created_at: Date;
+    updated_at: Date;
+    account_id: number;
+    account: Account | null;
+    contact: Contact | null;
+    owner: User;
+    is_closed: boolean;
+    stage_id: number;
+    stage: SalesFunnelStage;
+    funnel_id: number;
+    task_id: number | null;
+    task: Task | null;
+    is_won: boolean;
+    lost_reason: string | null;
+    won_date: Date | null;
+    lost_date: Date | null;
+}

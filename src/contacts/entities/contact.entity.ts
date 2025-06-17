@@ -2,7 +2,6 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColum
 import { User } from '../../users/entities/user.entity';
 import { Account } from '../../accounts/entities/account.entity';
 import { Interaction } from '../../interactions/entities/interaction.entity';
-import { AccountContact } from '../../account-contacts/entities/account-contact.entity';
 import { Task } from '../../tasks/entities/task.entity';
 
 @Entity('contacts')
@@ -16,7 +15,7 @@ export class Contact {
   @Column({ type: 'varchar', length: 100, nullable: false })
   last_name: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true, nullable: false })
+  @Column({ type: 'varchar', length: 255, unique: true, nullable: true })
   email: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
@@ -25,13 +24,21 @@ export class Contact {
   @Column({ type: 'varchar', length: 100, nullable: true })
   job_title: string;
 
-  @ManyToOne(() => Account, account => account.contacts, { onDelete: 'SET NULL', nullable: true })
-  @JoinColumn({ name: 'account_id' })
-  account: Account | null;
+@Column({ type: 'integer', nullable: true })
+account_id: number | null;
 
-  @ManyToOne(() => User, user => user.contacts, { onDelete: 'SET NULL', nullable: true })
-  @JoinColumn({ name: 'owner_id' })
-  owner: User | null;
+@ManyToOne(() => Account, account => account.contacts, { onDelete: 'SET NULL', nullable: true })
+@JoinColumn({ name: 'account_id' })
+account: Account | null;
+
+ // contact.entity.ts
+
+@Column({ type: 'integer', nullable: true })
+owner_id: number | null;
+
+@ManyToOne(() => User, user => user.contacts, { onDelete: 'SET NULL', nullable: true })
+@JoinColumn({ name: 'owner_id' })
+owner: User | null;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
@@ -45,12 +52,11 @@ export class Contact {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
+  // Взаимодействия, связанные с этим контактом
   @OneToMany(() => Interaction, interaction => interaction.contact)
   interactions: Interaction[];
 
-  @OneToMany(() => AccountContact, accountContact => accountContact.contact)
-  accountContacts: AccountContact[];
-
-  @OneToMany(() => Task, (task) => task.contact) // ✅ Обратная связь
+  // Задачи, связанные с этим контактом
+  @OneToMany(() => Task, task => task.contact)
   tasks: Task[];
 }

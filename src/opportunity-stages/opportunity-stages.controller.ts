@@ -1,47 +1,40 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  Param,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body } from '@nestjs/common';
 import { OpportunityStagesService } from './opportunity-stages.service';
 import { CreateOpportunityStageDto } from './dto/create-opportunity-stage.dto';
 import { UpdateOpportunityStageDto } from './dto/update-opportunity-stage.dto';
 
 @Controller('stages')
 export class OpportunityStagesController {
-  constructor(
-    private readonly opportunityStagesService: OpportunityStagesService,
-  ) {}
+  constructor(private readonly stagesService: OpportunityStagesService) {}
 
-  @Post()
-  create(@Body() dto: CreateOpportunityStageDto) {
-    return this.opportunityStagesService.create(dto);
-  }
 
   @Get()
-  findAll() {
-    return this.opportunityStagesService.findAll();
+  async getAllStages() {
+    return this.stagesService.findAll();
   }
 
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.opportunityStagesService.findOne(+id);
+  async getStage(@Param('id') id: string) {
+    const stageId = parseInt(id, 10);
+    return this.stagesService.findOne(stageId);
+  }
+
+
+  @Post()
+  async createStage(@Body() dto: CreateOpportunityStageDto) {
+    return this.stagesService.create(dto);
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() dto: UpdateOpportunityStageDto,
-  ) {
-    return this.opportunityStagesService.update(+id, dto);
+  async updateStage(@Param('id') id: string, @Body() dto: UpdateOpportunityStageDto) {
+    const stageId = parseInt(id, 10);
+    return this.stagesService.update(stageId, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.opportunityStagesService.remove(+id);
+  async deleteStage(@Param('id') id: string) {
+    const stageId = parseInt(id, 10);
+    return this.stagesService.remove(stageId);
   }
 }

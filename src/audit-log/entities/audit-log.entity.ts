@@ -4,7 +4,7 @@ import { User } from '../../users/entities/user.entity';
 @Entity('audit_log')
 export class AuditLog {
   @PrimaryGeneratedColumn('increment')
-  log_id: number;
+  log_id: number; 
 
   @ManyToOne(() => User, user => user.auditLogs, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'user_id' })
@@ -13,11 +13,11 @@ export class AuditLog {
   @Column({ type: 'varchar', length: 50, nullable: false })
   entity_type: string;
 
-  @Column({ type: 'int', nullable: false })
-  entity_id: number;
+   @Column({ type: 'varchar', length: 255, nullable: true }) 
+  entity_id: string | number;
 
   @Column({ type: 'varchar', length: 20, nullable: false })
-  action: string; // "CREATE", "UPDATE", "DELETE"
+  action: string; 
 
   @Column({ type: 'jsonb', nullable: true })
   old_values: any;

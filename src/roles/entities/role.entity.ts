@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UserRole } from '../../user-roles/entities/user-role.entity';
 import { RolePermission } from '../../role-permissions/entities/role-permission.entity';
-
+import { User } from 'src/users/entities/user.entity';
 @Entity('roles')
 export class Role {
   @PrimaryGeneratedColumn('increment')
@@ -18,4 +18,7 @@ export class Role {
 
   @OneToMany(() => RolePermission, rolePermission => rolePermission.role)
   rolePermissions: RolePermission[];
+
+  @OneToMany(() => User, user => user.role)
+  users: User[];
 }

@@ -1,26 +1,55 @@
+// services/audit-log.service.ts
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { AuditLog } from './entities/audit-log.entity';
 import { CreateAuditLogDto } from './dto/create-audit-log.dto';
 import { UpdateAuditLogDto } from './dto/update-audit-log.dto';
 
 @Injectable()
 export class AuditLogService {
-  create(createAuditLogDto: CreateAuditLogDto) {
-    return 'This action adds a new auditLog';
+  constructor(
+    @InjectRepository(AuditLog)
+    private readonly auditLogRepository: Repository<AuditLog>,
+  ) {}
+
+  // audit.service.ts
+  async getLogsByEntity(entityType: string, entityId: string | number) {
+    return this.auditLogRepository.find({
+      where: {
+        entity_type: entityType,
+        entity_id: entityId,
+      },
+      relations: ['user'],
+      order: { timestamp: 'DESC' },
+    });
   }
 
-  findAll() {
-    return `This action returns all auditLog`;
+  async create(createAuditLogDto: CreateAuditLogDto): Promise<AuditLog> {
+    const auditLog = this.auditLogRepository.create(createAuditLogDto);
+    return this.auditLogRepository.save(auditLog);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auditLog`;
+  async findAll(): Promise<AuditLog[]> {
+    return this.auditLogRepository.find();
   }
 
-  update(id: number, updateAuditLogDto: UpdateAuditLogDto) {
-    return `This action updates a #${id} auditLog`;
+  async findOne(id: number): Promise<AuditLog | null > {
+    return this.auditLogRepository.findOneBy({ log_id: id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} auditLog`;
+  async update(id: number, updateAuditLogDto: UpdateAuditLogDto): Promise<AuditLog> {
+    const auditLog = await this.auditLogRepository.preload({
+      log_id: id,
+      ...updateAuditLogDto,
+    });
+    if (!auditLog) {
+      throw new Error(`Audit log with ID ${id} not found`);
+    }
+    return this.auditLogRepository.save(auditLog);
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.auditLogRepository.delete(id);
   }
 }

@@ -21,4 +21,8 @@ export class UpdateUserDto {
 
   @IsOptional()
   is_active?: boolean;
+
+  password_hash?: string;
+  
+  role_id?: number;
 }

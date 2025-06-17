@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { UserRole } from '../../user-roles/entities/user-role.entity';
 import { Account } from '../../accounts/entities/account.entity';
 import { Contact } from '../../contacts/entities/contact.entity';
@@ -7,6 +7,7 @@ import { Interaction } from '../../interactions/entities/interaction.entity';
 import { Task } from '../../tasks/entities/task.entity';
 import { Document } from '../../documents/entities/document.entity';
 import { AuditLog } from '../../audit-log/entities/audit-log.entity';
+import { Role } from 'src/roles/entities/role.entity';
 
 @Entity('users')
 export class User {
@@ -40,8 +41,7 @@ export class User {
   @Column({ type: 'timestamptz', nullable: true })
   updated_at: Date;
 
-  @OneToMany(() => UserRole, userRole => userRole.user)
-  userRoles: UserRole[];
+  
 
   @OneToMany(() => Account, account => account.owner)
   accounts: Account[];
@@ -55,7 +55,7 @@ export class User {
   @OneToMany(() => Interaction, interaction => interaction.user)
   interactions: Interaction[];
 
-  @OneToMany(() => Task, (task) => task.assignedUser) // ✅ Обратная связь
+  @OneToMany(() => Task, (task) => task.assignedUser) 
   tasks: Task[];
 
   @OneToMany(() => Document, document => document.uploaded_by)
@@ -63,4 +63,10 @@ export class User {
 
   @OneToMany(() => AuditLog, auditLog => auditLog.user)
   auditLogs: AuditLog[];
+
+
+  @ManyToOne(() => Role, role => role.users)
+  @JoinColumn({ name: 'role_id' }) 
+  role: Role;
+
 }

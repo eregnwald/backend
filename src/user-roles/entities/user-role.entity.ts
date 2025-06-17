@@ -10,9 +10,7 @@ export class UserRole {
   @PrimaryColumn()
   role_id: number;
 
-  @ManyToOne(() => User, user => user.userRoles)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+ 
 
   @ManyToOne(() => Role, role => role.userRoles)
   @JoinColumn({ name: 'role_id' })

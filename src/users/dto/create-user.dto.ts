@@ -1,11 +1,11 @@
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength, IsInt } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(4)
   username: string;
 
-  @IsEmail()
+  
   @IsNotEmpty()
   email: string;
 
@@ -15,4 +15,9 @@ export class CreateUserDto {
 
   first_name?: string;
   last_name?: string;
+  
+  @IsNotEmpty({ message: 'Выберите роль' })
+  @IsInt({ message: 'ID роли должен быть числом' })
+  role_id: number;
+
 }

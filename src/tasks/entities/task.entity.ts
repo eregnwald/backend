@@ -4,6 +4,8 @@ import { Contact } from '../../contacts/entities/contact.entity';
 import { Account } from '../../accounts/entities/account.entity';
 import { TaskStatus } from '../../task-statuses/entities/task-status.entity';
 import { TaskPriority } from '../../task-priorities/entities/task-priority.entity';
+import { Opportunity } from '../../opportunities/entities/opportunity.entity';
+import { TaskType } from '../../task-type/entities/task-type.entity';
 
 @Entity('tasks')
 export class Task {
@@ -30,7 +32,7 @@ export class Task {
 
   // Внешний ключ на статус задачи
   @ManyToOne(() => TaskStatus)
-  @JoinColumn({ name: 'status_id' })
+  @JoinColumn({ name: 'status_id', })
   status: TaskStatus;
 
   // Приоритет
@@ -38,21 +40,47 @@ export class Task {
   @JoinColumn({ name: 'priority_id' })
   priority: TaskPriority;
 
-  // Кто назначен
- @ManyToOne(() => User, { nullable: true }) // ✅ Указываем, что связь может быть null
+  
+ @ManyToOne(() => User, { nullable: true }) // 
   @JoinColumn({ name: 'assigned_to' })
-  assignedUser: User | null; // ✅ Тип должен быть Union
-  // Связь с контактом
-  @ManyToOne(() => Contact, (contact) => contact.tasks) // ✅ Обратная связь
+  assignedUser: User | null; 
+ 
+  @ManyToOne(() => Contact, (contact) => contact.tasks) 
   @JoinColumn({ name: 'related_contact' })
   contact: Contact | null;
 
-  // Связь с аккаунтом
-  @ManyToOne(() => Account, (account) => account.tasks) // ✅ Обратная связь
-  @JoinColumn({ name: 'related_account' })
-  account: Account | null;
+ @Column({ type: 'int', nullable: true }) 
+  opportunity_id: number | null;
+
+  @ManyToOne(() => Opportunity, { nullable: true }) 
+  @JoinColumn({ name: 'opportunity_id' })
+  opportunity: Opportunity | null; 
+  
+  @Column({ type: 'boolean', default: false })
+  is_closed: boolean;
 
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
+
+
+  @Column({ type: 'int', nullable: true })
+task_type_id: number | null;
+
+@ManyToOne(() => TaskType, { nullable: true })
+@JoinColumn({ name: 'task_type_id' })
+type: TaskType | null;
   
+
+@Column({ type: 'int', nullable: true }) 
+  account_id: number | null;
+
+  @ManyToOne(() => Account, { nullable: true }) 
+  @JoinColumn({ name: 'account_id' })
+  account: Account | null; 
+
+
+
+
+  @Column({ type: 'text', nullable: true })
+  result: string | null;
 }

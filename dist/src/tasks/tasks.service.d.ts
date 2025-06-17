@@ -1,0 +1,30 @@
+import { Repository } from 'typeorm';
+import { Task } from './entities/task.entity';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
+import { User } from '../users/entities/user.entity';
+import { Contact } from '../contacts/entities/contact.entity';
+import { Account } from '../accounts/entities/account.entity';
+import { Opportunity } from '../opportunities/entities/opportunity.entity';
+import { OpportunityTask } from '../opportunitytask/entitites/opportunitytask.entity';
+import { NotificationsService } from 'src/notifications/notifications.service';
+export declare class TasksService {
+    private readonly taskRepository;
+    private readonly userRepository;
+    private readonly contactRepository;
+    private readonly accountRepository;
+    private readonly opportunityRepository;
+    private readonly opportunityTaskRepository;
+    private readonly notificationsService;
+    constructor(taskRepository: Repository<Task>, userRepository: Repository<User>, contactRepository: Repository<Contact>, accountRepository: Repository<Account>, opportunityRepository: Repository<Opportunity>, opportunityTaskRepository: Repository<OpportunityTask>, notificationsService: NotificationsService);
+    create(dto: CreateTaskDto): Promise<Task>;
+    findAll(currentUser: any): Promise<Task[]>;
+    findOne(id: number): Promise<Task>;
+    softDelete(id: number): Promise<void>;
+    restore(id: number): Promise<void>;
+    update(id: number, dto: UpdateTaskDto): Promise<Task>;
+    remove(id: number): Promise<void>;
+    checkSoonTasks(): Promise<void>;
+    find(options: any): Promise<Task[]>;
+    countOverdueTasks(userId: number): Promise<number>;
+}

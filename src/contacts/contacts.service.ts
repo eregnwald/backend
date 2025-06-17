@@ -20,6 +20,7 @@ export class ContactsService {
   async findAll(): Promise<Contact[]> {
   return await this.contactsRepository.find({
     where: { is_deleted: false },
+    relations: ['account'],
   });
 }
 

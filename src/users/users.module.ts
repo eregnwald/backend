@@ -9,11 +9,14 @@ import { JwtStrategy } from '../auth/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
+import { SalesFunnelsService } from '../salesfunnel/funnel.service';
+import { SalesFunnelsModule } from 'src/salesfunnel/funnel.module';
+import { Role } from 'src/roles/entities/role.entity';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, UserRole]),
+    TypeOrmModule.forFeature([User, UserRole, Role]),
     RolesModule,
+    SalesFunnelsModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
