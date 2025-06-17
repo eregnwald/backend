@@ -45,7 +45,7 @@ import { ReportsModule } from './reports/report.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }), // ✅ добавить эту строчку
+    ConfigModule.forRoot({ isGlobal: true }), 
     UsersModule,
    TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
